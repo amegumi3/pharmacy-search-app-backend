@@ -9,5 +9,6 @@ LineLength:
 
 AllCops:
   Exclude:
-   - "config/initializers/devise.rb"
-   - "bin/*"
+    - "db/**/*"
+    - "config/initializers/devise.rb"
+    - "bin/*"

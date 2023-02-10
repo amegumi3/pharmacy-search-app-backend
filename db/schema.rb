@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_06_061816) do
+ActiveRecord::Schema.define(version: 2023_02_09_065313) do
+
+  create_table "pharmacies", force: :cascade do |t|
+    t.string "name"
+    t.string "postal_code", null: false
+    t.string "adress", null: false
+    t.string "tel"
+    t.boolean "shuttered", default: false, null: false
+    t.float "latitude"
+    t.float "longitude"
+    t.integer "number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false

@@ -3,10 +3,9 @@ class Pharmacy < ApplicationRecord
   require "net/http"
   require 'json'
   require 'rexml/document'
-  
+
   YAHOO_API_KEY = ENV["API_KEY"]
   geocoded_by :address
-
 
   def self.import(file)
     i = 0

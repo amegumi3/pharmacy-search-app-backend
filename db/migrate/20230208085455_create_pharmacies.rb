@@ -4,7 +4,7 @@ class CreatePharmacies < ActiveRecord::Migration[6.1]
       t.string :name, nul: false
       t.string :postal_code, null: false
       t.string :adress, null: false
-      t.string :tel, nul:false
+      t.string :tel, nul: false
       t.boolean :shuttered, default: false, null: false
       t.float :latitude
       t.string :longtitude

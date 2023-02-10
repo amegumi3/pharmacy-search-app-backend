@@ -1,0 +1,13 @@
+inherit_from:
+  - .rubocop_airbnb.yml
+
+Rails:
+  Enabled: true
+
+LineLength:
+  Max: 135
+
+AllCops:
+  Exclude:
+   - "config/initializers/devise.rb"
+   - "bin/*"

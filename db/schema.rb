@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_10_030011) do
+ActiveRecord::Schema.define(version: 2023_02_12_065419) do
 
   create_table "pharmacies", force: :cascade do |t|
     t.string "name"
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 2023_02_10_030011) do
     t.integer "number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "pharmacy_reports", force: :cascade do |t|
+    t.integer "pharmacy_id", null: false
+    t.integer "report_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["pharmacy_id"], name: "index_pharmacy_reports_on_pharmacy_id"
+    t.index ["report_id"], name: "index_pharmacy_reports_on_report_id"
   end
 
   create_table "reports", force: :cascade do |t|
@@ -58,4 +67,6 @@ ActiveRecord::Schema.define(version: 2023_02_10_030011) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "pharmacy_reports", "pharmacies"
+  add_foreign_key "pharmacy_reports", "reports"
 end

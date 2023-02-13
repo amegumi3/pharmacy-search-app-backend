@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       resources :pharmacies do
         collection do
           post :import
+          post :report_import
         end
       end
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {

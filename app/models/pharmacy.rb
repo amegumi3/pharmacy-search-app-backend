@@ -4,6 +4,9 @@ class Pharmacy < ApplicationRecord
   require 'json'
   require 'rexml/document'
 
+  has_many :pharmacy_reports, dependent: :destroy
+  has_many :reports, through: :pharmacy_reports
+
   YAHOO_API_KEY = ENV["API_KEY"]
   geocoded_by :address
 

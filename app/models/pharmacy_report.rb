@@ -10,10 +10,8 @@ class PharmacyReport < ApplicationRecord
       next if row[13].value == "薬剤名等省略"
       pharmacy_id = Pharmacy.find_by(tel: row[10].value).id
       if row[13].value == "かかりつけ薬剤師指導料及びかかりつけ薬剤師包括管理料"
-        PharmacyReport.create(pharmacy_id: pharmacy_id, report_id: 17)
         PharmacyReport.create(pharmacy_id: pharmacy_id, report_id: 18)
-      elsif row[13].value == "調剤基本料１（注１のただし書に該当する場合）"
-
+        PharmacyReport.create(pharmacy_id: pharmacy_id, report_id: 19)
       else
         report_id = Report.find_by(name: row[13].value).id
         PharmacyReport.create(pharmacy_id: pharmacy_id, report_id: report_id)

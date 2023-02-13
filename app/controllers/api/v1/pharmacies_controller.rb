@@ -5,6 +5,11 @@ class Api::V1::PharmaciesController < ApplicationController
     render json: pharmacy
   end
 
+  def show
+    reports = Pharmacy.find(params[:id]).reports
+    render json: reports
+  end
+
   def import
     Pharmacy.import(params[:file])
     head :created

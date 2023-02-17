@@ -2,7 +2,7 @@ class PharmacyReport < ApplicationRecord
   belongs_to :pharmacy
   belongs_to :report
 
-  def self.report_import(file)
+  def self.pharmacy_report_import(file)
     xlsx = Roo::Excelx.new(file.tempfile)
     xlsx.each_row_streaming(offset: 3) do |row|
       next if Pharmacy.find_by(tel: row[10].value).blank?

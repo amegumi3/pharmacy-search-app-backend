@@ -7,10 +7,14 @@ Rails.application.routes.draw do
       namespace :auth do
         resources :sessions, only: [:index]
       end
-      # resources :pharmacies  do としていた部分を変更
-      resources :pharmacies, only: [:index, :show], constraints: { id:  /\d+/ } do
+      resources :pharmacies, only: [:index, :show], constraints: { id: /\d+/ } do
         collection do
-          post :import
+          post :pharmacy_import
+          post :pharmacy_report_import
+        end
+      end
+      resources :reports, only: [:index] do
+        collection do
           post :report_import
         end
       end

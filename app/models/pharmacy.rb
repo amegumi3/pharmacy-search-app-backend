@@ -10,7 +10,7 @@ class Pharmacy < ApplicationRecord
   YAHOO_API_KEY = ENV["API_KEY"]
   geocoded_by :address
 
-  def self.import(file)
+  def self.pharmacy_import(file)
     i = 0
     xlsx = Roo::Excelx.new(file.tempfile)
     xlsx.each_row_streaming(offset: 10) do |row|

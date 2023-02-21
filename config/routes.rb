@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       namespace :auth do
         resources :sessions, only: [:index]
       end
-      resources :pharmacies, only: [:index, :show], constraints: { id: /\d+/ } do
+      resources :pharmacies, only: [:index, :show] do
         collection do
           post :pharmacy_import
           post :pharmacy_report_import

@@ -1,5 +1,7 @@
 class Api::V1::PharmaciesController < ApplicationController
+  before_action :authenticate_api_v1_user!, only: [:pharmacy_import, :pharmacy_report_import]
   MAX_NUMBER = 20
+
   def index
     pharmacy = Pharmacy.near(params[:query]).limit(MAX_NUMBER)
     render json: pharmacy

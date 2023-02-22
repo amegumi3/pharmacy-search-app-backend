@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe "Api::V1::Pharmacies", type: :request do
   describe "GET /index" do
     let!(:pharmacies) { create_list(:pharmacy, 25) }
@@ -56,6 +54,40 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
       get "/api/v1/pharmacies/#{pharmacy_b.id}"
       json = JSON.parse(response.body)
       expect(json[0]).to be nil
+    end
+  end
+
+  describe "POST /pharmacy_import" do
+    let!(:user) { create(:user) }
+    let(:token) { user.create_new_auth_token }
+
+    file_path = "spec/fixtures/files/コード内容別一覧表（薬局）テスト.xlsx"
+
+    it "ログインしている場合は、ステータスコード success を返すこと" do
+      post "/api/v1/pharmacies/pharmacy_import", params: { file: fixture_file_upload(file_path) }, headers: token
+      expect(response).to have_http_status(:success)
+    end
+
+    it "ログインしていない場合は、ステータスコード unauthorized を返すこと" do
+      post "/api/v1/pharmacies/pharmacy_import", params: { file: fixture_file_upload(file_path) }
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
+
+  describe "POST /pharmacy_report_import" do
+    let!(:user) { create(:user) }
+    let(:token) { user.create_new_auth_token }
+
+    file_path = "spec/fixtures/files/コード内容別一覧表（薬局）テスト.xlsx"
+
+    it "ログインしている場合は、ステータスコード success を返すこと" do
+      post "/api/v1/pharmacies/pharmacy_report_import", params: { file: fixture_file_upload(file_path) }, headers: token
+      expect(response).to have_http_status(:success)
+    end
+
+    it "ログインしていない場合は、ステータスコード unauthorized を返すこと" do
+      post "/api/v1/pharmacies/pharmacy_report_import", params: { file: fixture_file_upload(file_path) }
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 end

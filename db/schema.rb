@@ -10,7 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_06_061816) do
+ActiveRecord::Schema.define(version: 2023_02_21_002619) do
+
+  create_table "pharmacies", force: :cascade do |t|
+    t.string "name"
+    t.string "postal_code", null: false
+    t.string "adress", null: false
+    t.string "tel"
+    t.boolean "shuttered", default: false, null: false
+    t.float "latitude"
+    t.float "longitude"
+    t.integer "number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "pharmacy_reports", force: :cascade do |t|
+    t.integer "pharmacy_id", null: false
+    t.integer "report_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["pharmacy_id"], name: "index_pharmacy_reports_on_pharmacy_id"
+    t.index ["report_id"], name: "index_pharmacy_reports_on_report_id"
+  end
+
+  create_table "reports", force: :cascade do |t|
+    t.string "name"
+    t.string "point"
+    t.boolean "basic"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "report_feature"
+    t.text "calc_case"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
@@ -37,4 +69,6 @@ ActiveRecord::Schema.define(version: 2023_02_06_061816) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "pharmacy_reports", "pharmacies"
+  add_foreign_key "pharmacy_reports", "reports"
 end

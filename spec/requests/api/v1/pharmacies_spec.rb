@@ -3,8 +3,8 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
     let!(:pharmacies) { create_list(:pharmacy, 25) }
 
     before do
-      # 舞浜駅という言葉をエンコード
-      word = "%E8%88%9E%E6%B5%9C%E9%A7%85"
+      # 新宿駅という言葉をエンコード
+      word = "%E6%96%B0%E5%AE%BF%E9%A7%85"
       get "/api/v1/pharmacies?query=#{word}", headers: headers
     end
 
@@ -60,8 +60,7 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
   describe "POST /pharmacy_import" do
     let!(:user) { create(:user) }
     let(:token) { user.create_new_auth_token }
-
-    file_path = "spec/fixtures/files/コード内容別一覧表（薬局）テスト.xlsx"
+    let(:file_path) { "spec/fixtures/files/コード内容別一覧表（薬局）テスト.xlsx" }
 
     it "ログインしている場合は、ステータスコード success を返すこと" do
       post "/api/v1/pharmacies/pharmacy_import", params: { file: fixture_file_upload(file_path) }, headers: token
@@ -77,8 +76,7 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
   describe "POST /pharmacy_report_import" do
     let!(:user) { create(:user) }
     let(:token) { user.create_new_auth_token }
-
-    file_path = "spec/fixtures/files/コード内容別一覧表（薬局）テスト.xlsx"
+    let(:file_path) { "spec/fixtures/files/届出受理医療機関名簿（薬局）テスト.xlsx" }
 
     it "ログインしている場合は、ステータスコード success を返すこと" do
       post "/api/v1/pharmacies/pharmacy_report_import", params: { file: fixture_file_upload(file_path) }, headers: token

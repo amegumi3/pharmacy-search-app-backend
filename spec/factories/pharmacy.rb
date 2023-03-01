@@ -1,11 +1,11 @@
 FactoryBot.define do
   factory :pharmacy do
-    name { "Test Pharmacy" }
-    tel { "012-123-4556" }
-    postal_code { "〒111-1111" }
-    adress { "千葉県浦安市舞浜１−１" }
+    name { "薬局名" }
+    tel { "012-345-6789" }
+    postal_code { "〒160-0014" }
+    adress { "新宿区内藤町１１" }
     shuttered { false }
-    latitude { "35.632896" }
-    longitude { "139.8803944" }
+    latitude { 35.685176 }
+    longitude { 139.710052 }
   end
 end

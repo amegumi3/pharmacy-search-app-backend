@@ -1,5 +1,5 @@
 class Report < ApplicationRecord
-  has_many :pharmacy_reports
+  has_many :pharmacy_reports, dependent: :destroy
   has_many :pharmacies, through: :pharmacy_reports
 
   def self.report_import(file)

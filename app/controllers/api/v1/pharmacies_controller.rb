@@ -1,9 +1,14 @@
 class Api::V1::PharmaciesController < ApplicationController
-  before_action :authenticate_api_v1_user!, only: [:pharmacy_import, :pharmacy_report_import]
   MAX_NUMBER = 20
 
   def index
-    pharmacy = Pharmacy.near(params[:query]).limit(MAX_NUMBER)
+    case params[:state]
+    when "周辺スポットから"
+      pharmacy = Pharmacy.near(params[:word]).limit(MAX_NUMBER)
+    when "薬局名から"
+      pharmacy = Pharmacy.where("name LIKE ?", "%#{params[:word]}%").limit(MAX_NUMBER)
+    end
+
     render json: pharmacy
   end
 
@@ -20,5 +25,9 @@ class Api::V1::PharmaciesController < ApplicationController
   def pharmacy_report_import
     PharmacyReport.pharmacy_report_import(params[:file])
     head :created
+  end
+
+  def destroy_all
+    Pharmacy.destroy_all
   end
 end

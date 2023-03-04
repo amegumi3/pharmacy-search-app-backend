@@ -7,6 +7,8 @@ class Api::V1::PharmaciesController < ApplicationController
       pharmacy = Pharmacy.near(params[:word]).limit(MAX_NUMBER)
     when "薬局名から"
       pharmacy = Pharmacy.where("name LIKE ?", "%#{params[:word]}%").limit(MAX_NUMBER)
+    when "住所から"
+      pharmacy = Pharmacy.where("adress LIKE ?", "%#{params[:word]}%").limit(MAX_NUMBER)
     end
 
     render json: pharmacy
@@ -18,12 +20,18 @@ class Api::V1::PharmaciesController < ApplicationController
   end
 
   def pharmacy_import
-    Pharmacy.pharmacy_import(params[:file])
+    pharmacies = params[:files]
+    pharmacies.each do |pharmacy|
+      Pharmacy.pharmacy_import(pharmacy)
+    end
     head :created
   end
 
   def pharmacy_report_import
-    PharmacyReport.pharmacy_report_import(params[:file])
+    pharmacy_reports = params[:files]
+    pharmacy_reports.each do |pharmacy_report|
+      PharmacyReport.pharmacy_report_import(pharmacy_report)
+    end
     head :created
   end
 

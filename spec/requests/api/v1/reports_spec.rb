@@ -3,7 +3,7 @@ RSpec.describe "Api::V1::Reports", type: :request do
     let(:file_path) { "spec/fixtures/files/届出一覧表.xlsx" }
 
     it "ステータスコード sucess を返すこと" do
-      post "/api/v1/reports/report_import", params: { file: fixture_file_upload(file_path) }
+      post "/api/v1/reports/report_import", params: { files: [fixture_file_upload(file_path)] }
       expect(response).to have_http_status(:success)
     end
 

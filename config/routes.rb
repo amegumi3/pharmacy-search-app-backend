@@ -11,11 +11,13 @@ Rails.application.routes.draw do
         collection do
           post :pharmacy_import
           post :pharmacy_report_import
+          delete :destroy_all
         end
       end
       resources :reports, only: [:index] do
         collection do
           post :report_import
+          delete :destroy_all
         end
       end
     end

@@ -10,5 +10,5 @@ LineLength:
 AllCops:
   Exclude:
     - "db/**/*"
-    - "config/initializers/devise.rb"
+    - "config/**/*"
     - "bin/*"

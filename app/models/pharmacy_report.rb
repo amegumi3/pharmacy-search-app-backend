@@ -6,8 +6,10 @@ class PharmacyReport < ApplicationRecord
     xlsx = Roo::Excelx.new(file.tempfile)
     xlsx.each_row_streaming(offset: 3) do |row|
       next if Pharmacy.find_by(tel: row[10].value).blank?
+      next if row[3].value != "薬局"
       next if row[13].blank?
-      next if row[13].value == "薬剤名等省略"
+      # 直接算定に影響する届出のみ登録
+      next if row[13].value.in?(["薬剤名等省略", "酸素の購入単価"])
       pharmacy_id = Pharmacy.find_by(tel: row[10].value).id
       if row[13].value == "かかりつけ薬剤師指導料及びかかりつけ薬剤師包括管理料"
         PharmacyReport.create(pharmacy_id: pharmacy_id, report_id: Report.find_by(name: "かりつけ薬剤師指導料").id)

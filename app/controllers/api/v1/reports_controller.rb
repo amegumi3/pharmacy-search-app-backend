@@ -1,9 +1,9 @@
 class Api::V1::ReportsController < ApplicationController
-  def index
-  end
-
   def report_import
-    Report.report_import(params[:file])
+    reports = params[:files]
+    reports.each do |report|
+      Report.report_import(report)
+    end
     head :created
   end
 

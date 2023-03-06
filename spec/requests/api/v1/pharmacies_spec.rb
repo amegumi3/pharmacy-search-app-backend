@@ -3,6 +3,7 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
     let!(:pharmacies_a) do
       create_list(:pharmacy, 21) do |pharmacy, i|
         pharmacy.name = "薬局名A-#{i}"
+        pharmacy.adress = "世田谷区-#{i}"
         pharmacy.save
       end
     end
@@ -35,6 +36,43 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
           else
             expect(json[i]).to be nil
           end
+        end
+      end
+    end
+
+    context "params[:state]で「住所から」という言葉を受け取った場合" do
+      before do
+        # 住所からという言葉をエンコード
+        state = "%E4%BD%8F%E6%89%80%E3%81%8B%E3%82%89"
+        # 世田谷区という言葉をエンコード
+        word = "%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA"
+        get "/api/v1/pharmacies?word=#{word}&state=#{state}", headers: headers
+      end
+
+      it "ステータスコード success を返すこと" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "コントローラーで設定した定数分、情報を受け取ること" do
+        json = JSON.parse(response.body)
+        pharmacies.each_with_index do |pharmacy, i|
+          if i < (Api::V1::PharmaciesController::MAX_NUMBER)
+            expect(json[i]["id"]).to eq(pharmacy.id)
+            expect(json[i]["name"]).to eq(pharmacy.name)
+            expect(json[i]["tel"]).to eq(pharmacy.tel)
+            expect(json[i]["postal_code"]).to eq(pharmacy.postal_code)
+            expect(json[i]["adress"]).to eq(pharmacy.adress)
+            expect(json[i]["shuttered"]).to eq(pharmacy.shuttered)
+          else
+            expect(json[i]).to be nil
+          end
+        end
+      end
+
+      it "取得した全ての薬局名に「世田谷区」ということばが入っていること" do
+        json = JSON.parse(response.body)
+        json.length do
+          expect(json[i]["name"]).to include("世田谷区")
         end
       end
     end
@@ -108,9 +146,9 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
   describe "POST /pharmacy_import" do
     let(:file_path) { "spec/fixtures/files/コード内容別一覧表（薬局）テスト.xlsx" }
 
-    it "ステータスコード created を返すこと" do
-      post "/api/v1/pharmacies/pharmacy_import", params: { file: fixture_file_upload(file_path) }
-      expect(response).to have_http_status(:created)
+    it "ステータスコード success を返すこと" do
+      post "/api/v1/pharmacies/pharmacy_import", params: { files: [fixture_file_upload(file_path)] }
+      expect(response).to have_http_status(:success)
     end
   end
 
@@ -118,7 +156,7 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
     let(:file_path) { "spec/fixtures/files/届出受理医療機関名簿（薬局）テスト.xlsx" }
 
     it "ステータスコード success を返すこと" do
-      post "/api/v1/pharmacies/pharmacy_report_import", params: { file: fixture_file_upload(file_path) }
+      post "/api/v1/pharmacies/pharmacy_report_import", params: { files: [fixture_file_upload(file_path)] }
       expect(response).to have_http_status(:success)
     end
   end
@@ -127,9 +165,11 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
     let!(:report) { create(:report) }
     let!(:pharmacy_a) { create(:pharmacy, reports: [report]) }
     let!(:pharmacy_b) { create(:pharmacy) }
+
     before do
       delete "/api/v1/pharmacies/destroy_all"
     end
+
     it "Pharmacyモデルの値が空になっていること" do
       expect(Pharmacy.all).to eq([])
     end

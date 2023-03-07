@@ -3,7 +3,7 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
     let!(:pharmacies_a) do
       create_list(:pharmacy, 21) do |pharmacy, i|
         pharmacy.name = "薬局名A-#{i}"
-        pharmacy.adress = "世田谷区-#{i}"
+        pharmacy.address = "世田谷区-#{i}"
         pharmacy.save
       end
     end
@@ -31,7 +31,7 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
             expect(json[i]["name"]).to eq(pharmacy.name)
             expect(json[i]["tel"]).to eq(pharmacy.tel)
             expect(json[i]["postal_code"]).to eq(pharmacy.postal_code)
-            expect(json[i]["adress"]).to eq(pharmacy.adress)
+            expect(json[i]["address"]).to eq(pharmacy.address)
             expect(json[i]["shuttered"]).to eq(pharmacy.shuttered)
           else
             expect(json[i]).to be nil
@@ -61,7 +61,7 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
             expect(json[i]["name"]).to eq(pharmacy.name)
             expect(json[i]["tel"]).to eq(pharmacy.tel)
             expect(json[i]["postal_code"]).to eq(pharmacy.postal_code)
-            expect(json[i]["adress"]).to eq(pharmacy.adress)
+            expect(json[i]["address"]).to eq(pharmacy.address)
             expect(json[i]["shuttered"]).to eq(pharmacy.shuttered)
           else
             expect(json[i]).to be nil
@@ -98,7 +98,7 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
             expect(json[i]["name"]).to eq(pharmacy.name)
             expect(json[i]["tel"]).to eq(pharmacy.tel)
             expect(json[i]["postal_code"]).to eq(pharmacy.postal_code)
-            expect(json[i]["adress"]).to eq(pharmacy.adress)
+            expect(json[i]["address"]).to eq(pharmacy.address)
             expect(json[i]["shuttered"]).to eq(pharmacy.shuttered)
           else
             expect(json[i]).to be nil

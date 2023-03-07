@@ -2,7 +2,6 @@ class Pharmacy < ApplicationRecord
   require 'uri'
   require "net/http"
   require 'json'
-  require 'rexml/document'
 
   has_many :pharmacy_reports, dependent: :destroy
   has_many :reports, through: :pharmacy_reports
@@ -22,23 +21,18 @@ class Pharmacy < ApplicationRecord
       end
       next if row[0].blank?
       postal_code = row[3].value[0..8]
-      adress = row[3].value[9..-1]
-      pharmacy = create(number: i, name: row[2].value, adress: adress, postal_code: postal_code, tel: row[4].value)
+      address = row[3].value[9..-1]
+      pharmacy = create(number: i, name: row[2].value, address: address, postal_code: postal_code, tel: row[4].value)
 
       # 緯度経度取得
-      query = URI.encode_www_form(query: pharmacy.adress)
-      search_url =  "https://map.yahooapis.jp/geocode/V1/geoCoder?appid=" + YAHOO_API_KEY
+      query = URI.encode_www_form(query: pharmacy.address)
+      search_url =  "https://map.yahooapis.jp/geocode/V1/geoCoder?appid=" + YAHOO_API_KEY + "&output=json&"
       search_url += query
-      res = URI.parse(search_url)
-      xml = Net::HTTP.get(res)
-      doc = REXML::Document.new(xml)
-      hash = Hash.from_xml(doc.to_s)
-      next if hash["YDF"]["Feature"].nil?
-      if !hash["YDF"]["Feature"][0].nil?
-        geocode = hash["YDF"]["Feature"][0]["Geometry"]["Coordinates"]
-      elsif !hash["YDF"]["Feature"]["Geometry"].nil?
-        geocode = hash["YDF"]["Feature"]["Geometry"]["Coordinates"]
-      end
+      uri = URI.parse(search_url)
+      res = Net::HTTP.get(uri)
+      data = JSON.parse(res)
+      next if data["ResultInfo"]["Count"] != 1
+      geocode = data["Feature"][0]["Geometry"]["Coordinates"]
       lon, lat = geocode.split(",")
       pharmacy.update(latitude: lat.to_f, longitude: lon.to_f)
     end

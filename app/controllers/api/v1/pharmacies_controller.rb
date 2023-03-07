@@ -8,7 +8,7 @@ class Api::V1::PharmaciesController < ApplicationController
     when "薬局名から"
       pharmacy = Pharmacy.where("name LIKE ?", "%#{params[:word]}%").limit(MAX_NUMBER)
     when "住所から"
-      pharmacy = Pharmacy.where("adress LIKE ?", "%#{params[:word]}%").limit(MAX_NUMBER)
+      pharmacy = Pharmacy.where("address LIKE ?", "%#{params[:word]}%").limit(MAX_NUMBER)
     end
 
     render json: pharmacy

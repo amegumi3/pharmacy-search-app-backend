@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_21_002619) do
+ActiveRecord::Schema.define(version: 2023_03_06_221521) do
 
   create_table "pharmacies", force: :cascade do |t|
     t.string "name"
     t.string "postal_code", null: false
-    t.string "adress", null: false
+    t.string "address", null: false
     t.string "tel"
     t.boolean "shuttered", default: false, null: false
     t.float "latitude"

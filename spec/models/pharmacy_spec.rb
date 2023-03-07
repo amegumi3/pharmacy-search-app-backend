@@ -17,7 +17,7 @@ RSpec.describe Pharmacy, type: :model do
         pharmacies.each do |pharmacy|
           expect(pharmacy.name).to include("薬局名")
           expect(pharmacy.postal_code).to include("〒")
-          expect(pharmacy.adress).to include("新宿区")
+          expect(pharmacy.address).to include("新宿区")
           expect(pharmacy.tel).to include("012-")
           expect(pharmacy.shuttered).to eq(true).or eq(false)
           expect(pharmacy.number).to eq(nil)
@@ -32,10 +32,10 @@ RSpec.describe Pharmacy, type: :model do
         end
       end
 
-      it "adressカラムの値は住所のみであること（郵便番号が入っていないこと）" do
+      it "addressカラムの値は住所のみであること（郵便番号が入っていないこと）" do
         pharmacies.each do |pharmacy|
-          expect(pharmacy.adress).to start_with("新宿区")
-          expect(pharmacy.adress).not_to include("〒")
+          expect(pharmacy.address).to start_with("新宿区")
+          expect(pharmacy.address).not_to include("〒")
         end
       end
     end

@@ -8,8 +8,8 @@ class PharmacyReport < ApplicationRecord
       next if Pharmacy.find_by(tel: row[10].value).blank?
       next if row[3].value != "薬局"
       next if row[13].blank?
-      # 直接算定に影響する届出のみ登録
-      next if row[13].value.in?(["薬剤名等省略", "酸素の購入単価"])
+      # 調剤報酬点数表に記載されているもの以外は除く
+      next if row[13].value.in?(["薬剤名等省略", "酸素の購入単価", "無菌製剤処理料"])
       pharmacy_id = Pharmacy.find_by(tel: row[10].value).id
       if row[13].value == "かかりつけ薬剤師指導料及びかかりつけ薬剤師包括管理料"
         PharmacyReport.create(pharmacy_id: pharmacy_id, report_id: Report.find_by(name: "かりつけ薬剤師指導料").id)

@@ -3,7 +3,7 @@ FactoryBot.define do
     name { "薬局名" }
     tel { "012-345-6789" }
     postal_code { "〒160-0014" }
-    adress { "新宿区内藤町１１" }
+    address { "新宿区内藤町１１" }
     shuttered { false }
     latitude { 35.685176 }
     longitude { 139.710052 }

@@ -15,8 +15,10 @@ class Api::V1::PharmaciesController < ApplicationController
   end
 
   def show
-    reports = Pharmacy.find(params[:id]).reports
-    render json: reports
+    pharmacy = Pharmacy.includes(:reports).find(params[:id])
+    reports = pharmacy.reports
+    date_created = pharmacy.pharmacy_reports.first&.date_created
+    render json: { reports: reports, date_created: date_created }
   end
 
   def pharmacy_import

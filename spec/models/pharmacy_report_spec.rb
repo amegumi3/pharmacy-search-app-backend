@@ -14,12 +14,14 @@ RSpec.describe PharmacyReport, type: :model do
     end
 
     it "Reportモデルに保存されている届出名と一致するデータの個数分保存していること" do
-      expect(PharmacyReport.count).to eq 3
+      expect(pharmacy_a.pharmacy_reports.count).to eq 1
+      expect(pharmacy_b.pharmacy_reports.count).to eq 2
     end
 
-    it "ReportモデルとPharmacyモデルが関連づけされていること" do
-      expect(pharmacy_a.reports.count).to eq 1
-      expect(pharmacy_b.reports.count).to eq 2
+    it "date_createdカラムに値が入っていること" do
+      pharmacy_b.pharmacy_reports.each do |pharmacy_report|
+        expect(pharmacy_report.date_created.empty?).to be false
+      end
     end
   end
 end

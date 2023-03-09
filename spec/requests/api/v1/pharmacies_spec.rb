@@ -116,8 +116,8 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
   end
 
   describe "GET /show" do
-    let(:report) { create(:report) }
-    let(:pharmacy_a) { create(:pharmacy, reports: [report]) }
+    let(:pharmacy_a) { create(:pharmacy, pharmacy_reports: [pharmacy_report]) }
+    let(:pharmacy_report) { create(:pharmacy_report) }
     let(:pharmacy_b) { create(:pharmacy) }
 
     it "ステータスコード success を返すこと" do
@@ -128,12 +128,13 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
     it "関連する基準が取得されていること" do
       get "/api/v1/pharmacies/#{pharmacy_a.id}"
       json = JSON.parse(response.body)
-      expect(json["reports"][0]["id"]).to eq(report.id)
-      expect(json["reports"][0]["name"]).to eq(report.name)
-      expect(json["reports"][0]["point"]).to eq(report.point)
-      expect(json["reports"][0]["basic"]).to eq(report.basic)
-      expect(json["reports"][0]["report_feature"]).to eq(report.report_feature)
-      expect(json["reports"][0]["calc_case"]).to eq(report.calc_case)
+      expect(json["reports"][0]["id"]).to eq(pharmacy_a.reports[0].id)
+      expect(json["reports"][0]["name"]).to eq(pharmacy_a.reports[0].name)
+      expect(json["reports"][0]["point"]).to eq(pharmacy_a.reports[0].point)
+      expect(json["reports"][0]["basic"]).to eq(pharmacy_a.reports[0].basic)
+      expect(json["reports"][0]["report_feature"]).to eq(pharmacy_a.reports[0].report_feature)
+      expect(json["reports"][0]["calc_case"]).to eq(pharmacy_a.reports[0].calc_case)
+      expect(json["date_created"]).to eq(pharmacy_a.pharmacy_reports[0].date_created)
     end
 
     it "関連する基準が存在しない場合は、nilを返す" do

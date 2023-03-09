@@ -1,4 +1,4 @@
-FROM ruby:3.0.4-slim
+FROM --platform=linux/x86_64 ruby:3.0.4-slim
 
 RUN apt-get -y update
 RUN apt-get -y install make build-essential

@@ -10,5 +10,5 @@ RUN bundle install
 
 RUN gem install -v 6.1.7 rails
 COPY . /app
-
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+EXPOSE 3010
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3010"]

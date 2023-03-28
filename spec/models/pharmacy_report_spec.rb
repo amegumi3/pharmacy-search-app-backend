@@ -1,5 +1,5 @@
 RSpec.describe PharmacyReport, type: :model do
-  describe "pharmacy_importメソッドのテスト" do
+  describe "pharmacy_report_importメソッドのテスト" do
     let!(:pharmacy_a) { create(:pharmacy, name: "薬局名A") }
     let!(:pharmacy_b) { create(:pharmacy, name: "薬局名B", tel: "012-345-6780") }
     let!(:report_a) { create(:report) }
@@ -18,9 +18,9 @@ RSpec.describe PharmacyReport, type: :model do
       expect(pharmacy_b.pharmacy_reports.count).to eq 2
     end
 
-    it "date_createdカラムに値が入っていること" do
+    it "date_createdカラムに適切な値が入っていること" do
       pharmacy_b.pharmacy_reports.each do |pharmacy_report|
-        expect(pharmacy_report.date_created.empty?).to be false
+        expect(pharmacy_report.date_created).to eq "令和５年１月１日"
       end
     end
   end

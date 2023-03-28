@@ -1,7 +1,7 @@
 class Pharmacy < ApplicationRecord
-  require 'uri'
+  require "uri"
   require "net/http"
-  require 'json'
+  require "json"
 
   has_many :pharmacy_reports, dependent: :destroy
   has_many :reports, through: :pharmacy_reports

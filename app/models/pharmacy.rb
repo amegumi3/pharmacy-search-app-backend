@@ -20,9 +20,10 @@ class Pharmacy < ApplicationRecord
         pharmacy.save
       end
       next if row[0].blank?
+      name = row[2].value.presence || "名称不明"
       postal_code = row[3].value[0..8]
       address = row[3].value[9..-1]
-      pharmacy = create(number: i, name: row[2].value, address: address, postal_code: postal_code, tel: row[4].value)
+      pharmacy = create(number: i, name: name, address: address, postal_code: postal_code, tel: row[4].value)
 
       # 緯度経度取得
       query = URI.encode_www_form(query: pharmacy.address)

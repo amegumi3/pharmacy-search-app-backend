@@ -9,13 +9,13 @@ RSpec.describe Pharmacy, type: :model do
     end
 
     it "ファイル内に記載されている薬局の数だけデータを保存していること" do
-      expect(Pharmacy.count).to eq 3
+      expect(Pharmacy.count).to eq 4
     end
 
     context "メソッドによってモデルにデータが保存された場合" do
-      it "各カラムには期待する値が入っていること" do
+      it "nameカラムを除く各カラムには期待する値が入っていること" do
         pharmacies.each do |pharmacy|
-          expect(pharmacy.name).to include("薬局名")
+          # expect(pharmacy.name).to include("薬局名")
           expect(pharmacy.postal_code).to include("〒")
           expect(pharmacy.address).to include("新宿区")
           expect(pharmacy.tel).to include("012-")
@@ -37,6 +37,17 @@ RSpec.describe Pharmacy, type: :model do
           expect(pharmacy.address).to start_with("新宿区")
           expect(pharmacy.address).not_to include("〒")
         end
+      end
+
+      it "セルに薬局名が記載されている場合はその値が入っていること" do
+        pharmacies[0..2].each do |pharmacy|
+          expect(pharmacy.name).to include("薬局名")
+        end
+      end
+
+      it "セルに薬局名が記載されていない場合は「名称不明」と入っていること" do
+        pharmacy = pharmacies.last
+        expect(pharmacy.name).to eq("名称不明")
       end
     end
   end

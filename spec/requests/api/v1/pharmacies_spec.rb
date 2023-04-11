@@ -118,14 +118,20 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
   describe "GET /show" do
     let(:pharmacy_a) { create(:pharmacy, pharmacy_reports: [pharmacy_report]) }
     let(:pharmacy_report) { create(:pharmacy_report) }
-    let(:pharmacy_b) { create(:pharmacy) }
+    let!(:other_pharmacies) do
+      create_list(:pharmacy, 7) do |pharmacy, i|
+        pharmacy.name = "近隣薬局-#{i + 1}"
+        pharmacy.address = "世田谷区-#{i}"
+        pharmacy.save
+      end
+    end
 
     it "ステータスコード success を返すこと" do
       get "/api/v1/pharmacies/#{pharmacy_a.id}"
       expect(response).to have_http_status(:success)
     end
 
-    it "関連する基準が取得されていること" do
+    it "関連する届出を受け渡していること" do
       get "/api/v1/pharmacies/#{pharmacy_a.id}"
       json = JSON.parse(response.body)
       expect(json["reports"][0]["id"]).to eq(pharmacy_a.reports[0].id)
@@ -137,10 +143,28 @@ RSpec.describe "Api::V1::Pharmacies", type: :request do
       expect(json["date_created"]).to eq(pharmacy_a.pharmacy_reports[0].date_created)
     end
 
-    it "関連する基準が存在しない場合は、nilを返す" do
-      get "/api/v1/pharmacies/#{pharmacy_b.id}"
+    it "関連する届出が存在しない場合は、nilを返す" do
+      get "/api/v1/pharmacies/#{other_pharmacies.first.id}"
       json = JSON.parse(response.body)
       expect(json[0]).to be nil
+    end
+
+    it "コントローラーで設定した定数分の近隣薬局情報を受け渡していること" do
+      get "/api/v1/pharmacies/#{pharmacy_a.id}"
+      json = JSON.parse(response.body)
+      near_pharmacies = pharmacy_a.nearbys
+      near_pharmacies.each_with_index do |pharmacy, i|
+        if i < (Api::V1::PharmaciesController::NEARBY_PHARMACY_NUMBER)
+          expect(json["near_pharmacy"][i]["id"]).to eq(pharmacy.id)
+          expect(json["near_pharmacy"][i]["name"]).to eq(pharmacy.name)
+          expect(json["near_pharmacy"][i]["tel"]).to eq(pharmacy.tel)
+          expect(json["near_pharmacy"][i]["postal_code"]).to eq(pharmacy.postal_code)
+          expect(json["near_pharmacy"][i]["address"]).to eq(pharmacy.address)
+          expect(json["near_pharmacy"][i]["shuttered"]).to eq(pharmacy.shuttered)
+        else
+          expect(pharmacy[i]).to be nil
+        end
+      end
     end
   end
 

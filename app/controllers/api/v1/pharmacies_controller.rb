@@ -1,5 +1,6 @@
 class Api::V1::PharmaciesController < ApplicationController
   MAX_NUMBER = 20
+  NEARBY_PHARMACY_NUMBER = 6
 
   def index
     case params[:state]
@@ -16,9 +17,10 @@ class Api::V1::PharmaciesController < ApplicationController
 
   def show
     pharmacy = Pharmacy.includes(:reports).find(params[:id])
+
     reports = pharmacy.reports
     date_created = pharmacy.pharmacy_reports.first&.date_created
-    render json: { reports: reports, date_created: date_created }
+    render json: { reports: reports, date_created: date_created, near_pharmacy: pharmacy.nearbys.limit(NEARBY_PHARMACY_NUMBER) }
   end
 
   def pharmacy_import

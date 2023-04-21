@@ -5,7 +5,7 @@ class Api::V1::PharmaciesController < ApplicationController
   def index
     case params[:state]
     when "周辺スポットから"
-      pharmacy = Pharmacy.near(params[:word]).limit(MAX_NUMBER)
+      pharmacy = Pharmacy.near(params[:word], 10).limit(MAX_NUMBER)
     when "薬局名から"
       pharmacy = Pharmacy.where("name LIKE ?", "%#{params[:word]}%").limit(MAX_NUMBER)
     when "住所から"
